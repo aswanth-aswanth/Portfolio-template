@@ -384,7 +384,7 @@
                   <input type="hidden" name="_captcha" value="false" />
                   <div class="col-lg-6 col-md-6 col-12">
                     <div class="form-floating">
-                      <input type="text" name="name" id="name" class="form-control" placeholder="Name" required />
+                      <input type="text" name="name" oninput="validateInput(this)" id="name" class="form-control" placeholder="Name" required />
                       <label for="floatingInput">Name</label>
                     </div>
                   </div>
@@ -442,26 +442,29 @@
 
       form.addEventListener("submit", async (event) => {
         event.preventDefault();
-
+        submitButton.disabled=true;
         if (validateForm()) {
-          // If the form is valid, submit the data using Fetch API
+          
           const formData = new FormData(form);
 
           try {
-            const response = await fetch(form.action, {
+            const response = await fetch(form.action, { 
               method: form.method,
               body: formData,
             });
-
+            
             if (response.ok) {
               alert("Form submitted successfully!");
-              form.reset(); // Clear the form
+              form.reset(); 
+              submitButton.disabled=false;
             } else {
               alert("Form submission failed.");
+              submitButton.disabled=false;
             }
           } catch (error) {
             console.error("Error:", error);
             alert("An error occurred while submitting the form.");
+            submitButton.disabled=false;
           }
         }
       });
@@ -477,6 +480,9 @@
 
         return true;
       }
+      function validateInput(inputElement) {
+      inputElement.value = inputElement.value.replace(/[0-9]/g, '');
+    }
     </script>
   </body>
 </html>
